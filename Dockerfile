@@ -1,7 +1,7 @@
 # Stage 1 build
-FROM alpine:3.18.5
+FROM alpine:3.18.5 as builder
 
-ENV ENGINE_BRANCH=5.9.0
+ENV ENGINE_BRANCH=5.10.0
 ENV ENGINE_REPO=https://github.com/minetest/minetest
 
 # RelWithDebInfo
@@ -66,14 +66,14 @@ RUN adduser -D minetest --uid 30000 -h /var/lib/minetest && \
 
 WORKDIR /var/lib/minetest
 
-COPY --from=0 /usr/local/lib/libspatialindex* /usr/local/lib/
-COPY --from=0 /usr/local/share/minetest /usr/local/share/minetest
-COPY --from=0 /usr/local/bin/minetestserver /usr/local/bin/minetestserver
+COPY --from=builder /usr/local/lib/libspatialindex* /usr/local/lib/
+COPY --from=builder /usr/local/share/luanti /usr/local/share/luanti
+COPY --from=builder /usr/local/bin/luantiserver /usr/local/bin/luantiserver
 
 USER minetest:minetest
 
 EXPOSE 30000/udp 30000/tcp
 VOLUME /var/lib/minetest/ /etc/minetest/
 
-ENTRYPOINT ["/usr/local/bin/minetestserver"]
+ENTRYPOINT ["/usr/local/bin/luantiserver"]
 CMD ["--config", "/etc/minetest/minetest.conf"]
