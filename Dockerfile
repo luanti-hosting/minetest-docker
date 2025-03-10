@@ -1,7 +1,7 @@
 # Stage 1 build
 FROM alpine:3.18.5 as builder
 
-ENV ENGINE_BRANCH=5.10.0
+ENV ENGINE_BRANCH=5.11.0
 ENV ENGINE_REPO=https://github.com/minetest/minetest
 
 # RelWithDebInfo
